@@ -18,10 +18,10 @@ Analyze the provided tweets to determine their likely impact on the future stock
 
 <Solving Process>
 1. Identify the Target Stock: Extract the stock symbol from the tweets.
-2. Filter for Significant Signals: Focus on tweets containing meaningful market-moving information while eliminating noise or irrelevant details.
+2. Filter Meaningful Tweets: Discard tweets that lack clear information about stock price movements. Focus only on those with market-moving details.
 3. Tweet Analysis:
-Separate the Factors: For each tweet, identify Positive Factors and Negative Factors.
-Assess Sentiment: Evaluate how each tweet might influence investor sentiment.
+Separate the Factors: For each relevant tweet, identify Positive and Negative factors.
+Assess Sentiment: Evaluate how each relevant tweet might influence investor sentiment.
 Overall Sentiment Summary: Combine your analyses to conclude the overall sentiment.
 
 <Tweets>
