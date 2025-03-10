@@ -35,7 +35,7 @@ You must do this: Conclude with a single line that states the overall sentiment.
 """
 
 # Process the file
-filename = 'tweet/preprocessed/AAPL/2014-01-02'
+filename = 'tweet/preprocessed/AAPL/2014-01-03'
 tweets = process_tweet_file(filename)
 
 # Format tweets and print with template
