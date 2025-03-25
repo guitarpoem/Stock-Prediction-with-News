@@ -1,0 +1,186 @@
+Date,Sentiment,Analysis
+2014-01-01,Negative,"Okay, I need to analyze the given tweets to determine their likely impact on the future stock price of a company. The user provided a set of tweets and specified steps for analysis.
+
+First, let me identify the target stock from each tweet. Looking at the tweets:
+
+1. ""rt AT_USER summary of yesterday's webcast featuring $ aapl $ wynn $ goog $ lgf tradereducation options hedgingstrategies - - URL""
+2. Same as above.
+3. Itv will boost apple URL $ aapl apple
+4. iPhone users are more intelligent than samsung, blackberry and htc owners, $ aapl bbry, URL
+5. Same as the first tweet.
+6. 2013 wrap-up and trading set review - part iii, mentions $ aapl apple $ bp cnw csco csx goog hpq ibm intc ngg URL
+7. Apple screwed up big time URL $ amzn apple
+8. Same as the first tweet.
+
+From these, it seems the target stock is Apple (AAPL). Now, I'll analyze each tweet.
+
+1. The first tweet mentions a webcast and strategies for hedging and trading options. It's not directly related to Apple's performance but more about user comments or content from someone else.
+2. Similar as above; again, unrelated to Apple.
+3. ""itv will boost apple"" likely refers to something related to IT vertical (ITV, which could be a typo for IT services or maybe a different company). This seems out of context and doesn't mention Apple directly.
+4. Talks about user sentiment towards iPhones being more intelligent compared to others. This relates to the market and user opinions but not specific Apple performance metrics.
+5. Repeating the first tweet's content, so no new information here.
+6. Discusses a 2013 trading review, which is not relevant to current stock price trends of Apple.
+7. ""Apple screwed up big time"" likely refers to an event that negatively impacts Apple, possibly in their business operations or market perception.
+8. Similar to the first tweet; no direct connection.
+
+Now, considering the factors and sentiment:
+
+- Positive Factors: Any tweets mentioning positive news about Apple could boost investor confidence and increase stock price.
+- Negative Factors: If a tweet mentions Apple's performance (like a great year, success in a specific sector) or if it suggests negative developments affecting their stock.
+
+Looking at each tweet:
+
+1. No mention of Apple performance.
+2. Same as above; no direct Apple info.
+3. IT services update; likely unrelated to Apple.
+4. User sentiment about iPhones; affects investor sentiment but not directly Apple's performance data.
+5. Repeating the same content without new insights.
+6. 2013 review, which might show ongoing market conditions or previous performance but doesn't directly link to current stock.
+7. Negative event affecting Apple's performance, which could lead to negative sentiment for the stock.
+
+Assuming that a negative event from Apple affects investor confidence and expectations about future performance, this would likely decrease the stock price.
+
+So, considering all factors, there are no strong positive or neutral indicators here, but one negative tweet suggests a potential dip in Apple's performance. Therefore, the overall sentiment is Negative."
+2014-01-02,Neutral,"Alright, let me try to figure out how to determine the overall impact on the stock price of Apple (APL) based on the provided tweets. 
+
+First, I need to identify the target stock symbol from each tweet, which is ""apl"". So, all these tweets are about APL. Now, looking at each tweet individually and analyzing their factors and sentiment.
+
+Starting with the first tweet: ""wall st kicks off new year on lower note"" – this seems like a negative outlook but not directly related to APL. I'll note it's Neutral since the stock symbol is different.
+
+Second tweet mentions Apple pushing into healthcare – again, unrelated to APL, so also Neutral.
+
+Third tweet talks about top 3 trade ideas for 2014 and future gains. It says ""Apple gained 8% in 2013 vs S&P’s 30%, but don't cry for ABL investors..."" This is about Apple's historical performance, not the stock itself. So again, Neutral.
+
+Fourth tweet: ""$ aapl having breathing difficulties"" – this seems like an internal company issue, which can affect investor sentiment. Breathing difficulties might be seen as a signal of instability, so I'll consider this Negative.
+
+Fifth tweet mentions current activities and other updates for APL. No specific mention of Apple's stock, so probably Neutral.
+
+Sixth tweet: ""blackberry and singer Alicia Keys to part ways"" – again, unrelated to APL. Neutral.
+
+Seventh tweet: ""chinas Xiaomi says to more than double smartphone sales in 2014."" This relates to a competitor, which could affect Apple's market position but not directly the stock itself. So, Neutral.
+
+Eighth tweet: ""rt AT_USER our top 3 trade ideas for 2014 and two $1k futures wins already in the bank..."" – again, unrelated to APL. Neutral.
+
+Ninth tweet is a repeat of the eighth one, so same analysis.
+
+Tenth tweet asks about top picks for Q1 2014: Apple, Bee, Facebook, Clsx, Sne. This is all about the company's products and their performance, not specifically about stock price news. So, Neutral.
+
+Eleventh tweet repeats the tenth one, still unrelated to APL. Neutral.
+
+Twelfth tweet mentions ABL making a new year on a lower note – same as the first tweet. Not related to Apple. Neutral.
+
+Thirteenth tweet: ""apple gained 8% in 2013 vs S&P’s 30%, but don't cry for ABL investors."" This ties back to past performance, not current stock. Neutral.
+
+Fourteenth tweet: ""new education supply/demand zones..."" – unrelated. Neutral.
+
+Fifteenth tweet: ""apple denies working with NSA..."". Again, irrelevant. Neutral.
+
+Sixteenth tweet mentions Microsoft and Google reducing smart powers. Since it's about competitors, affects market but doesn't directly influence Apple stock. So, Neutral.
+
+Seventeenth tweet: new supply/demand zones etc., same as fifteenth. Neutral.
+
+Eighteenth tweet: bought a TV based on potential competition – unrelated. Neutral.
+
+Nineteenth tweet: ""apple cleaning the mobile germ warehouse."" Doesn't relate to ABL, so Neutral.
+
+Twentieth tweet: ""apple cleaning the mobile germ warehouse."" Same as above. Neutral.
+
+Twenty-first tweet: kara Swisher and Walt Mossberg launching re/Code. Not related. Neutral.
+
+Twenty-second tweet mentions ""year of innovation"" with margin concerns. This is a general trend affecting companies, not specific to ABL. Neutral.
+
+Twenty-third tweet: about margin concerns for 2014. Again, unrelated. Neutral.
+
+Twenty-fourth tweet: apple downgraded on margin concerns; stocks start 2014... – relates back to past performance. Neutral.
+
+Twenty-fifth tweet mentions big tuna's stock chart moving within a range. Not specific to Apple. Neutral.
+
+Sixteenth tweet and onwards are all about competitors, not the company itself. The rest don't directly relate either.
+
+So overall, looking at each tweet: most of them are about Apple's history or market position without mentioning any news related to the stock. Therefore, the sentiment remains Neutral."
+2014-01-03,Unknown,"Alright, so I need to figure out how to determine the impact of these tweets on the future stock price of Apple Inc., Apple (AAPL). Let me go through each tweet step by step.
+
+First, I'll look at the target stock symbol from the tweets. It seems like several tweets mention AAPL, so that's my starting point. Now, for each tweet, I need to separate them into Positive and Negative factors, assess the sentiment towards investors, and then summarize overall sentiments.
+
+Starting with tweet 1: ""rt AT_USER our top 3 trade ideas for 2014 and two $ 1,000 futures wins already in the bank $ gld $ usu $ aapl - - URL"". The factors here seem neutral because it's just listing the stock names without any positive or negative indicators. I'll note that as Neutral.
+
+Next tweet 2: ""the five-year-old ipad : when will people stop upgrading ? $ aapl github aapl URL"". This seems to be about Apple's performance, but the mention of GitHub isn't relevant here. The tweet is somewhat vague and doesn't indicate strong sentiment towards or against AAPL. So I'll mark this as Neutral.
+
+Tweet 3: ""$ aapl was below this level two weeks ago , and then jumped to 570 the following week ( chl news ) . earnings run up will be next catalyst "". This tweet is discussing Apple's stock price movement from below a certain level, which could indicate potential for a positive or neutral response. The phrase ""next catalyst"" suggests something upcoming might drive changes in sentiment. I'll tentatively mark this as Neutral.
+
+Tweet 4: ""$ aapl apple sale : best buy temporarily cuts iphone 5s price URL"". Here, Apple is selling its iPhone 5s and suggesting it's the best bet for a discount price. This seems to suggest that investors might be interested in purchasing iPhones at a lower price point, which could lead to gains. I'll mark this as Positive.
+
+Tweet 5: ""rt AT_USER also added $ aapl common here w 541 stop"". The tweet mentions Apple stock trading below $541 and the user is stopping the trade. This seems like selling pressure on the stock, which could indicate negative sentiment if holders are selling off their positions. I'll mark this as Negative.
+
+Tweet 6: ""rt AT_USER google's dirty secret : android phones are basically used as dumbphones $ aapl $ goog by AT_USER URL"". This tweet discusses Apple's use of Android phones for dumbphones and refers to Google's secret. There's no direct mention of Apple's stock performance, but it might be seen as a distraction or unrelated information. I'll mark this as Neutral.
+
+Tweet 7: ""$ bbry $ aapl blackberry files suit against typo : full story URL"". This one seems to be discussing Apple's Android devices being used for dumbphones and Google's secret, which doesn't relate directly to the stock price of Apple. So, it might not have any impact on AAPL. I'll mark this as Neutral.
+
+Tweet 8: ""rt AT_USER hmm not so much for $ aapl .. we got this double top threat goin on here .."". This tweet is expressing disappointment about Apple's stock performance and mentioning a double top scenario where they're vulnerable to price corrections. If the stock is about to drop, it could lead to negative sentiment because investors might be worried about future declines. I'll mark this as Negative.
+
+Tweet 9: ""rt AT_USER AT_USER what i like about $ aapl long term is its ~ 9.5 pe ex-cash gives it a floor on valuation . only hi quality s …"". This tweet seems to express positive sentiment towards Apple's technical analysis and future growth potential based on P/E ratio. It suggests the stock could grow, so I'll mark this as Positive.
+
+Tweet 10: ""$ aapl is soooo pathetic . one has to wonder if icahn is selling . 544 must hold ."". This tweet is very negative about Apple's performance and mentions investor interest in keeping CEO Carol Dweck. It seems like strong negative sentiment here because Apple isn't doing well and investors are cautious. I'll mark this as Negative.
+
+Tweet 11: ""rt AT_USER 50 % of trades in $ aapl today are for less than 100 shares oddlots"". This is about trading activity on the stock, specifically mentioning that 50% of trades are under 100 shares. It's more of a general trading perspective rather than directly affecting stock price. I'll mark this as Neutral.
+
+Tweet 12: ""the good support for $ aapl today is 541.02 URL"". This tweet refers to Apple's current stock price and mentions ""good support."" Again, it's more about the current state of trading rather than affecting the future stock price. So, I'll mark this as Neutral.
+
+Tweet 13: ""rt AT_USER our top 3 trade ideas for 2014 and two $ 1,000 futures wins already in the bank $ gld $ usu $ aapl - - URL"". Similar to tweet 1, it's listing stock names without any positive or negative cues. I'll mark this as Neutral.
+
+Tweet 14: ""b bloggers trading $ aapl stupid again nsa ‘ malicious hackers ’ & then ? before it becomes farce maybe next try to parse what ‘ any ’ means & when"". This tweet is more of a speculative trading tip and doesn't provide direct information about Apple's stock. It seems like just speculation without impact on the stock price, so I'll mark this as Neutral.
+
+Tweet 15: ""rt AT_USER our top 3 trade ideas for 2014 and two $ 1,000 futures wins already in the bank $ gld $ usu $ aapl - - URL"". Again, listing stock names without sentiment. Marked as Neutral.
+
+Tweet 16: ""also referring to tweet 15: rt AT_USER another one from user @1549848170"" – seems like a repetition or mention of the same tweet. It doesn't provide new information or impact on AAPL's stock price, so I'll mark this as Neutral.
+
+Tweet 17: ""also referring to tweet 16: rt AT_USER another one from user @1549848170"" – same thing repeated. Marked as Neutral.
+
+Finally, tweets 18-23 are about Apple's stock performance and investor sentiment. I'll need to analyze these to determine their impact. However, since the user hasn't provided tweet content for tweets 18-23 yet, I can only comment on what's available. The ones after tweet 17 are about the user interacting with the previous tweet, so they're not part of the main stream data.
+
+In summary, some tweets might have strong positive or negative impacts based on their wording and context. I'll categorize them as Positive, Neutral, or Negative accordingly."
+2014-01-04,Positive,"Okay, I'm trying to figure out how to analyze these tweets for their impact on the stock price of Apple Inc. Let me break it down step by step.
+
+First, I need to identify the target stock symbol. Looking at the tweets, the most common one is ""aapl,"" which stands for Apple Inc. So that's my target stock.
+
+Next, for each tweet, I have to separate the factors into Positive and Negative. Then assess the sentiment towards investor sentiment.
+
+Starting with the first tweet: ""$ aapl - boeing contract with machinists - details of agreement -> URL stock stocks stockaction"". The words ""boeing"" and ""machinists"" are mentioned, but it doesn't specify whether they're positive or negative. It's just stating information about a contract without any sentiment indication.
+
+The second tweet is ""claytrader : * * $ aapl video chart 1/3 / 14 * * : claytrader URL."" The presence of ""claytrader"" is unclear and not providing much insight into sentiment. It's just listing some details about the stock, so probably neutral or positive, but I'm not sure.
+
+The third tweet says: ""rt AT_USER january 3 , 1977 – steve jobs and steve wozniak incorporated apple computer company . $ aapl."" This seems genuine, mentioning Steve Jobs and Wozniak. It's talking about the incorporation of Apple in January 1977, which is significant because Steve Jobs was a major figure in Apple's early days.
+
+The fourth tweet: ""apple iwatch reportedly already in production URL ibdblogs via AT_USER $ aapl $ qcom $ sne $ nke."" This one mentions that the iPhone iWatch is being produced. That would be positive because it shows that the product is viable and moving towards market approval, which is good for Apple.
+
+The fifth tweet: ""apple stock forecast : playing $ aapl - s & p 500 spread as “ market neutral ” strategy . | URL $ spy."" This seems to provide a financial outlook, indicating a negative sentiment since it suggests the company is betting on a negative market trend. This would likely lead people to sell their Apple stocks, so that's negative.
+
+Now, putting this together:
+
+- Positive tweets: The third tweet mentions Steve Jobs and Wozniak, which is positive because it builds credibility.
+- Neutral or Mixed: The first tweet doesn't indicate sentiment; the second isn't enough information. The fourth tweet about iWatch production supports the stock positively.
+- Negative tweets: Third tweet's incorporation of Steve Jobs could be seen as a positive event for Apple, but maybe not necessarily positive in all contexts? Wait, ""incorporated"" is neutral because it just describes a fact without emotion. But I'm not sure if that's positive or negative.
+- The fifth tweet is definitely negative.
+
+But wait, the third tweet is about incorporation; does that mean Apple was acquired by Steve Jobs at some point, which might have affected their future performance? It could be a positive sign because it shows they're part of a major company, but maybe not necessarily a selling point for new investors. The fourth tweet's production of the iWatch is definitely a selling point.
+
+So, let me recount:
+
+1. Incorporation tweet: Neutral (just fact)
+2. Iwatch production: Positive
+3. Stock forecast: Negative
+
+Neutral overall? Or positive because they're adding more positive points?"
+2014-01-05,Unknown,"Okay, so I'm trying to figure out the impact of these tweets on the stock price of Apple (AAPL). Let me go through each tweet one by one.
+
+First tweet says: ""$ aapl machinists vote helps boeing avoid hiring crunch URL"". Hmm, that doesn't look like real information. It sounds like some kind of joke or prediction from people. The word ""boeing"" might be a typo for ""hiring,"" so maybe it's about the company avoiding a crunch by hiring more workers. If they're suggesting a positive outcome related to productivity, that could be seen as a good sign. But sometimes fake news can lead to mixed reactions.
+
+Second tweet: ""$ aapl jim , the ' great ' jim ghostine has predicted $425 for AAPL what says u ? . target = $ 425 URL"". This looks like another made-up prediction or quote from someone, possibly Jim with a ghost name. If they're predicting a specific price point and offering their opinion, it's speculative. It could be positive, negative, or neutral depending on how realistic the numbers are.
+
+Third tweet: ""$ aapl forecasting apple using evidence-driven technical analysis (subscribers only ) . target = $ 425 URL"". This seems like a prediction based on technical analysis, which is a data-driven approach. Apple often relies on this kind of analysis, especially for stock prices. If they're making an update or forecast with subscriber access, it could indicate confidence in the company's future performance.
+
+Fourth tweet: ""$ spy $ fb $ aapl $ target = $ 425 URL"". This seems like a list of symbols and some number. It might be suggesting that these companies are targeting $425 each or something related to their stock prices. It doesn't specify how, but sometimes investors look at multiple stocks for diversification or to see if they're heading in the right direction.
+
+Putting it all together: Each tweet seems to offer a prediction, either from a real person or a made-up quote. Predictions can be positive, negative, or neutral depending on whether they contribute positively to investor confidence. But given that many of these tweets are speculative and not backed by credible sources, it's hard to tell if their impact is significant or not.
+
+I think each tweet is providing some information but without real data supporting them, so the overall sentiment might be neutral because there's uncertainty involved."
