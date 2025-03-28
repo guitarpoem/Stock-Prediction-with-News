@@ -15,9 +15,10 @@ tf.random.set_seed(42)
 
 # Parameters
 LAG_WINDOW = 15  # Size of the lag window (Δd)
+PREDICTION_HORIZON = 1  # Number of days to look ahead for prediction
 TEST_SIZE = 0.2  # Proportion of data to use for testing
-USE_SENTIMENT = True  # Switch to toggle sentiment feature
-# USE_SENTIMENT = False  # Switch to toggle sentiment feature
+# USE_SENTIMENT = True  # Switch to toggle sentiment feature
+USE_SENTIMENT = False  # Switch to toggle sentiment feature
 
 # Model hyperparameters
 LEARNING_RATE = 0.001  # Learning rate for Adam optimizer
@@ -92,18 +93,18 @@ def add_technical_indicators(df):
     
     return df
 
-def create_sequences(data, lag_window):
-    """Create sequences for LSTM model to predict the overall movement for the next 15 days."""
+def create_sequences(data, lag_window, prediction_horizon):
+    """Create sequences for LSTM model to predict the overall movement for the next N days."""
     X, y = [], []
     
-    for i in range(len(data) - lag_window - 15):
+    for i in range(len(data) - lag_window - prediction_horizon):
         # Input sequence: features from days i to i+lag_window-1
         seq = data[i:i+lag_window].values
         
-        # Target: overall movement direction for the next 15 days
-        # Calculate if the price after 15 days is higher than the current price
+        # Target: overall movement direction for the next prediction_horizon days
+        # Calculate if the price after prediction_horizon days is higher than the current price
         current_close = data['close_price'].iloc[i+lag_window-1]
-        future_close = data['close_price'].iloc[i+lag_window+14]  # +14 to get 15 days ahead
+        future_close = data['close_price'].iloc[i+lag_window+prediction_horizon-1]
         
         # 1 if overall movement is positive, 0 if negative or flat
         target = 1 if future_close > current_close else 0
@@ -150,7 +151,9 @@ def build_model(input_shape):
 def main():
     # Load and prepare data
     print("Loading and preparing data...")
-    data = load_and_prepare_data('dataset/AAPL.csv')
+    # data = load_and_prepare_data('dataset/AAPL.csv')
+    data = load_and_prepare_data('dataset/AMZN.csv')
+
     print(f"Data shape: {data.shape}")
     
     # Add technical indicators
@@ -183,7 +186,8 @@ def main():
     
     # Create sequences
     print("Creating sequences...")
-    X, y = create_sequences(data_scaled, LAG_WINDOW)
+    print(f"Using prediction horizon of {PREDICTION_HORIZON} days")
+    X, y = create_sequences(data_scaled, LAG_WINDOW, PREDICTION_HORIZON)
     print(f"X shape: {X.shape}, y shape: {y.shape}")
     
     # Display sample data
@@ -192,7 +196,7 @@ def main():
         print(f"Sequence {i+1}:")
         sample_df = pd.DataFrame(X[i], columns=features)
         print(sample_df)
-        print(f"Target y[{i}]: {y[i]} ({'Up' if y[i] == 1 else 'Down'})")
+        print(f"Target y[{i}]: {y[i]} ({'Up' if y[i] == 1 else 'Down'} over next {PREDICTION_HORIZON} days)")
         print()
     
     # Split into training and testing sets
@@ -267,7 +271,7 @@ def main():
     plt.figure(figsize=(15, 6))
     plt.plot(y_test[:sample_size], label='Actual Movement', marker='o')
     plt.plot(y_pred_binary[:sample_size], label='Predicted Movement', marker='x')
-    plt.title('Actual vs Predicted Stock Movements (Next Day)')
+    plt.title(f'Actual vs Predicted Stock Movements (Next {PREDICTION_HORIZON} Days)')
     plt.xlabel('Sample Index')
     plt.ylabel('Movement (1=Up, 0=Down)')
     plt.legend()
