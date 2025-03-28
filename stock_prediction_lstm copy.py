@@ -20,10 +20,10 @@ USE_SENTIMENT = True  # Switch to toggle sentiment feature
 # USE_SENTIMENT = False  # Switch to toggle sentiment feature
 
 # Model hyperparameters
-LEARNING_RATE = 0.001  # Learning rate for Adam optimizer
+LEARNING_RATE = 0.01  # Learning rate for Adam optimizer
 BATCH_SIZE = 64  # Batch size for training
-EPOCHS = 70  # Maximum number of epochs
-EARLY_STOPPING_PATIENCE = EPOCHS  # Patience for early stopping
+EPOCHS = 50  # Maximum number of epochs
+EARLY_STOPPING_PATIENCE = 5  # Patience for early stopping
 VALIDATION_SPLIT = 0.2  # Proportion of training data to use for validation
 
 # LSTM model architecture
@@ -44,7 +44,7 @@ def load_and_prepare_data(file_path):
     
     # Convert sentiment to numerical values
     # Treat 'Missing' as a fourth category
-    sentiment_map = {'Positive': 1, 'Neutral': 0, 'Negative': -1, 'Missing': 0}
+    sentiment_map = {'Positive': 1, 'Neutral': 0, 'Negative': -1, 'Missing': 2}
     df['sentiment_numeric'] = df['Sentiment'].map(sentiment_map)
     
     # Select relevant features
@@ -53,60 +53,17 @@ def load_and_prepare_data(file_path):
     
     return df[['date'] + features]
 
-def add_technical_indicators(df):
-    """Add technical indicators to the dataframe."""
-    # Make a copy to avoid warnings
-    df = df.copy()
-    
-    # Simple Moving Averages (SMA)
-    df['sma_5'] = df['close_price'].rolling(window=5).mean()
-    df['sma_20'] = df['close_price'].rolling(window=20).mean()
-    
-    # Exponential Moving Averages (EMA)
-    df['ema_12'] = df['close_price'].ewm(span=12, adjust=False).mean()
-    df['ema_26'] = df['close_price'].ewm(span=26, adjust=False).mean()
-    
-    # MACD (Moving Average Convergence Divergence)
-    df['macd'] = df['ema_12'] - df['ema_26']
-    df['macd_signal'] = df['macd'].ewm(span=9, adjust=False).mean()
-    df['macd_hist'] = df['macd'] - df['macd_signal']
-    
-    # RSI (Relative Strength Index)
-    delta = df['close_price'].diff()
-    gain = delta.where(delta > 0, 0)
-    loss = -delta.where(delta < 0, 0)
-    avg_gain = gain.rolling(window=14).mean()
-    avg_loss = loss.rolling(window=14).mean()
-    rs = avg_gain / avg_loss
-    df['rsi_14'] = 100 - (100 / (1 + rs))
-    
-    # Bollinger Bands
-    df['bb_middle'] = df['close_price'].rolling(window=20).mean()
-    df['bb_std'] = df['close_price'].rolling(window=20).std()
-    df['bb_upper'] = df['bb_middle'] + (df['bb_std'] * 2)
-    df['bb_lower'] = df['bb_middle'] - (df['bb_std'] * 2)
-    df['bb_width'] = (df['bb_upper'] - df['bb_lower']) / df['bb_middle']
-    
-    # Fill NaN values that result from rolling calculations
-    df = df.fillna(method='bfill')
-    
-    return df
-
 def create_sequences(data, lag_window):
-    """Create sequences for LSTM model to predict the overall movement for the next 15 days."""
+    """Create sequences for LSTM model to predict the next day's movement."""
     X, y = [], []
     
-    for i in range(len(data) - lag_window - 15):
+    for i in range(len(data) - lag_window - 1):
         # Input sequence: features from days i to i+lag_window-1
         seq = data[i:i+lag_window].values
         
-        # Target: overall movement direction for the next 15 days
-        # Calculate if the price after 15 days is higher than the current price
-        current_close = data['close_price'].iloc[i+lag_window-1]
-        future_close = data['close_price'].iloc[i+lag_window+14]  # +14 to get 15 days ahead
-        
-        # 1 if overall movement is positive, 0 if negative or flat
-        target = 1 if future_close > current_close else 0
+        # Target: movement direction for the next day (day i+lag_window)
+        # 1 if movement_percent > 0 else 0
+        target = 1 if data['movement_percent'].iloc[i+lag_window] > 0 else 0
         
         X.append(seq)
         y.append(target)
@@ -152,11 +109,6 @@ def main():
     print("Loading and preparing data...")
     data = load_and_prepare_data('dataset/AAPL.csv')
     print(f"Data shape: {data.shape}")
-    
-    # Add technical indicators
-    print("Adding technical indicators...")
-    data = add_technical_indicators(data)
-    print(f"Data shape after adding indicators: {data.shape}")
     
     # Normalize numerical features
     features = data.columns[1:]  # Exclude date

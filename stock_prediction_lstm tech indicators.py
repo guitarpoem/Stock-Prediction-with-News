@@ -14,7 +14,7 @@ np.random.seed(42)
 tf.random.set_seed(42)
 
 # Parameters
-LAG_WINDOW = 15  # Size of the lag window (Δd)
+LAG_WINDOW = 10  # Size of the lag window (Δd)
 TEST_SIZE = 0.2  # Proportion of data to use for testing
 USE_SENTIMENT = True  # Switch to toggle sentiment feature
 # USE_SENTIMENT = False  # Switch to toggle sentiment feature
@@ -22,8 +22,8 @@ USE_SENTIMENT = True  # Switch to toggle sentiment feature
 # Model hyperparameters
 LEARNING_RATE = 0.001  # Learning rate for Adam optimizer
 BATCH_SIZE = 64  # Batch size for training
-EPOCHS = 70  # Maximum number of epochs
-EARLY_STOPPING_PATIENCE = EPOCHS  # Patience for early stopping
+EPOCHS = 50  # Maximum number of epochs
+EARLY_STOPPING_PATIENCE = 50  # Patience for early stopping
 VALIDATION_SPLIT = 0.2  # Proportion of training data to use for validation
 
 # LSTM model architecture
@@ -44,7 +44,7 @@ def load_and_prepare_data(file_path):
     
     # Convert sentiment to numerical values
     # Treat 'Missing' as a fourth category
-    sentiment_map = {'Positive': 1, 'Neutral': 0, 'Negative': -1, 'Missing': 0}
+    sentiment_map = {'Positive': 1, 'Neutral': 0, 'Negative': -1, 'Missing': 2}
     df['sentiment_numeric'] = df['Sentiment'].map(sentiment_map)
     
     # Select relevant features
@@ -93,48 +93,28 @@ def add_technical_indicators(df):
     return df
 
 def create_sequences(data, lag_window):
-    """Create sequences for LSTM model to predict the overall movement for the next 15 days."""
+    """Create sequences for LSTM model to predict the next day's movement."""
     X, y = [], []
     
-    for i in range(len(data) - lag_window - 15):
+    for i in range(len(data) - lag_window - 1):
         # Input sequence: features from days i to i+lag_window-1
         seq = data[i:i+lag_window].values
         
-        # Target: overall movement direction for the next 15 days
-        # Calculate if the price after 15 days is higher than the current price
-        current_close = data['close_price'].iloc[i+lag_window-1]
-        future_close = data['close_price'].iloc[i+lag_window+14]  # +14 to get 15 days ahead
-        
-        # 1 if overall movement is positive, 0 if negative or flat
-        target = 1 if future_close > current_close else 0
+        # Target: movement direction for the next day (day i+lag_window)
+        # 1 if movement_percent > 0 else 0
+        target = 1 if data['movement_percent'].iloc[i+lag_window] > 0 else 0
         
         X.append(seq)
         y.append(target)
     
     return np.array(X), np.array(y)
 
-# def build_model(input_shape):
-#     """Build and compile the LSTM model."""
-#     model = Sequential([
-#         LSTM(LSTM_UNITS_1, return_sequences=True, input_shape=input_shape),
-#         Dropout(DROPOUT_RATE),
-#         LSTM(LSTM_UNITS_2, return_sequences=False),
-#         Dropout(DROPOUT_RATE),
-#         Dense(1, activation='sigmoid')
-#     ])
-    
-#     model.compile(
-#         optimizer=Adam(learning_rate=LEARNING_RATE),
-#         loss='binary_crossentropy',
-#         metrics=['accuracy']
-#     )
-    
-#     return model
-
 def build_model(input_shape):
-    """Build and compile a simpler LSTM model with a single LSTM layer."""
+    """Build and compile the LSTM model."""
     model = Sequential([
-        LSTM(LSTM_UNITS_1, return_sequences=False, input_shape=input_shape),
+        LSTM(LSTM_UNITS_1, return_sequences=True, input_shape=input_shape),
+        Dropout(DROPOUT_RATE),
+        LSTM(LSTM_UNITS_2, return_sequences=False),
         Dropout(DROPOUT_RATE),
         Dense(1, activation='sigmoid')
     ])
@@ -146,6 +126,22 @@ def build_model(input_shape):
     )
     
     return model
+
+# def build_model(input_shape):
+#     """Build and compile a simpler LSTM model with a single LSTM layer."""
+#     model = Sequential([
+#         LSTM(LSTM_UNITS_1, return_sequences=False, input_shape=input_shape),
+#         Dropout(DROPOUT_RATE),
+#         Dense(1, activation='sigmoid')
+#     ])
+    
+#     model.compile(
+#         optimizer=Adam(learning_rate=LEARNING_RATE),
+#         loss='binary_crossentropy',
+#         metrics=['accuracy']
+#     )
+    
+#     return model
 
 def main():
     # Load and prepare data
