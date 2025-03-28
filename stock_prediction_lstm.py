@@ -6,6 +6,7 @@ from sklearn.metrics import accuracy_score, classification_report
 from tensorflow.keras.models import Sequential # type: ignore
 from tensorflow.keras.layers import LSTM, Dense, Dropout # type: ignore
 from tensorflow.keras.optimizers import Adam # type: ignore
+from tensorflow.keras.callbacks import EarlyStopping # type: ignore
 import tensorflow as tf
 
 # Set random seeds for reproducibility
@@ -13,11 +14,22 @@ np.random.seed(42)
 tf.random.set_seed(42)
 
 # Parameters
-LAG_WINDOW = 5  # Size of the lag window (Δd)
+LAG_WINDOW = 15  # Size of the lag window (Δd)
 TEST_SIZE = 0.2  # Proportion of data to use for testing
-# USE_SENTIMENT = True  # Switch to toggle sentiment feature
-USE_SENTIMENT = False  # Switch to toggle sentiment feature
+USE_SENTIMENT = True  # Switch to toggle sentiment feature
+# USE_SENTIMENT = False  # Switch to toggle sentiment feature
 
+# Model hyperparameters
+LEARNING_RATE = 0.01  # Learning rate for Adam optimizer
+BATCH_SIZE = 64  # Batch size for training
+EPOCHS = 50  # Maximum number of epochs
+EARLY_STOPPING_PATIENCE = 5  # Patience for early stopping
+VALIDATION_SPLIT = 0.2  # Proportion of training data to use for validation
+
+# LSTM model architecture
+LSTM_UNITS_1 = 64  # Number of units in first LSTM layer
+LSTM_UNITS_2 = 32  # Number of units in second LSTM layer
+DROPOUT_RATE = 0.2  # Dropout rate for regularization
 
 def load_and_prepare_data(file_path):
     """Load and prepare the dataset."""
@@ -58,18 +70,34 @@ def create_sequences(data, lag_window):
     
     return np.array(X), np.array(y)
 
+# def build_model(input_shape):
+#     """Build and compile the LSTM model."""
+#     model = Sequential([
+#         LSTM(LSTM_UNITS_1, return_sequences=True, input_shape=input_shape),
+#         Dropout(DROPOUT_RATE),
+#         LSTM(LSTM_UNITS_2, return_sequences=False),
+#         Dropout(DROPOUT_RATE),
+#         Dense(1, activation='sigmoid')
+#     ])
+    
+#     model.compile(
+#         optimizer=Adam(learning_rate=LEARNING_RATE),
+#         loss='binary_crossentropy',
+#         metrics=['accuracy']
+#     )
+    
+#     return model
+
 def build_model(input_shape):
-    """Build and compile the LSTM model."""
+    """Build and compile a simpler LSTM model with a single LSTM layer."""
     model = Sequential([
-        LSTM(64, return_sequences=True, input_shape=input_shape),
-        Dropout(0.2),
-        LSTM(32, return_sequences=False),
-        Dropout(0.2),
+        LSTM(LSTM_UNITS_1, return_sequences=False, input_shape=input_shape),
+        Dropout(DROPOUT_RATE),
         Dense(1, activation='sigmoid')
     ])
     
     model.compile(
-        optimizer=Adam(learning_rate=0.000001),
+        optimizer=Adam(learning_rate=LEARNING_RATE),
         loss='binary_crossentropy',
         metrics=['accuracy']
     )
@@ -83,7 +111,6 @@ def main():
     print(f"Data shape: {data.shape}")
     
     # Normalize numerical features
-    # scaler = MinMaxScaler()
     features = data.columns[1:]  # Exclude date
     
     # Filter out sentiment if not using it
@@ -93,8 +120,18 @@ def main():
     else:
         print(f"Training with sentiment. Features used: {features}")
     
-    # data_scaled = pd.DataFrame(scaler.fit_transform(data[features]), columns=features)
-    data_scaled = data[features]  # Use raw data without normalization
+    # Create a copy of the data for scaling
+    data_scaled = data[features].copy()
+    
+    # Special handling for movement_percent to keep it centered around 0
+    movement_mean = data_scaled['movement_percent'].mean()
+    movement_std = data_scaled['movement_percent'].std()
+    data_scaled['movement_percent'] = (data_scaled['movement_percent'] - movement_mean) / movement_std
+    
+    # Scale other numerical features using MinMaxScaler
+    price_volume_features = [f for f in features if f != 'movement_percent' and f != 'sentiment_numeric']
+    scaler = MinMaxScaler()
+    data_scaled[price_volume_features] = scaler.fit_transform(data[price_volume_features])
     
     # Create sequences
     print("Creating sequences...")
@@ -119,11 +156,20 @@ def main():
     print("Building and training the model...")
     model = build_model(input_shape=(LAG_WINDOW, len(features)))
     
+    # Add early stopping
+    early_stopping = EarlyStopping(
+        monitor='val_loss',
+        patience=EARLY_STOPPING_PATIENCE,
+        restore_best_weights=True,
+        verbose=1
+    )
+    
     history = model.fit(
         X_train, y_train,
-        epochs=34,
-        batch_size=32,
-        validation_split=0.2,
+        epochs=EPOCHS,
+        batch_size=BATCH_SIZE,
+        validation_split=VALIDATION_SPLIT,
+        callbacks=[early_stopping],
         verbose=1
     )
     
