@@ -15,6 +15,9 @@ tf.random.set_seed(42)
 # Parameters
 LAG_WINDOW = 5  # Size of the lag window (Δd)
 TEST_SIZE = 0.2  # Proportion of data to use for testing
+# USE_SENTIMENT = True  # Switch to toggle sentiment feature
+USE_SENTIMENT = False  # Switch to toggle sentiment feature
+
 
 def load_and_prepare_data(file_path):
     """Load and prepare the dataset."""
@@ -66,7 +69,7 @@ def build_model(input_shape):
     ])
     
     model.compile(
-        optimizer=Adam(learning_rate=0.001),
+        optimizer=Adam(learning_rate=0.000001),
         loss='binary_crossentropy',
         metrics=['accuracy']
     )
@@ -82,6 +85,14 @@ def main():
     # Normalize numerical features
     # scaler = MinMaxScaler()
     features = data.columns[1:]  # Exclude date
+    
+    # Filter out sentiment if not using it
+    if not USE_SENTIMENT and 'sentiment_numeric' in features:
+        features = [f for f in features if f != 'sentiment_numeric']
+        print(f"Training without sentiment. Features used: {features}")
+    else:
+        print(f"Training with sentiment. Features used: {features}")
+    
     # data_scaled = pd.DataFrame(scaler.fit_transform(data[features]), columns=features)
     data_scaled = data[features]  # Use raw data without normalization
     
@@ -110,7 +121,7 @@ def main():
     
     history = model.fit(
         X_train, y_train,
-        epochs=50,
+        epochs=34,
         batch_size=32,
         validation_split=0.2,
         verbose=1
