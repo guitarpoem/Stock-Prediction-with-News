@@ -39,30 +39,30 @@ def load_and_prepare_data(file_path):
     return df[['date'] + features]
 
 def create_sequences(data, lag_window):
-    """Create sequences for LSTM model with multiple prediction targets."""
+    """Create sequences for LSTM model to predict the next day's movement."""
     X, y = [], []
     
-    for i in range(len(data) - lag_window):
+    for i in range(len(data) - lag_window - 1):
         # Input sequence: features from days i to i+lag_window-1
         seq = data[i:i+lag_window].values
         
-        # Target: movement direction for each day in the window
+        # Target: movement direction for the next day (day i+lag_window)
         # 1 if movement_percent > 0 else 0
-        targets = (data['movement_percent'].iloc[i:i+lag_window].values > 0).astype(int)
+        target = 1 if data['movement_percent'].iloc[i+lag_window] > 0 else 0
         
         X.append(seq)
-        y.append(targets)
+        y.append(target)
     
     return np.array(X), np.array(y)
 
-def build_model(input_shape, output_length):
+def build_model(input_shape):
     """Build and compile the LSTM model."""
     model = Sequential([
         LSTM(64, return_sequences=True, input_shape=input_shape),
         Dropout(0.2),
         LSTM(32, return_sequences=False),
         Dropout(0.2),
-        Dense(output_length, activation='sigmoid')
+        Dense(1, activation='sigmoid')
     ])
     
     model.compile(
@@ -80,14 +80,24 @@ def main():
     print(f"Data shape: {data.shape}")
     
     # Normalize numerical features
-    scaler = MinMaxScaler()
+    # scaler = MinMaxScaler()
     features = data.columns[1:]  # Exclude date
-    data_scaled = pd.DataFrame(scaler.fit_transform(data[features]), columns=features)
+    # data_scaled = pd.DataFrame(scaler.fit_transform(data[features]), columns=features)
+    data_scaled = data[features]  # Use raw data without normalization
     
     # Create sequences
     print("Creating sequences...")
     X, y = create_sequences(data_scaled, LAG_WINDOW)
     print(f"X shape: {X.shape}, y shape: {y.shape}")
+    
+    # Display sample data
+    print("\nSample X data (first 3 sequences):")
+    for i in range(min(3, len(X))):
+        print(f"Sequence {i+1}:")
+        sample_df = pd.DataFrame(X[i], columns=features)
+        print(sample_df)
+        print(f"Target y[{i}]: {y[i]} ({'Up' if y[i] == 1 else 'Down'})")
+        print()
     
     # Split into training and testing sets
     split_idx = int(len(X) * (1 - TEST_SIZE))
@@ -96,7 +106,7 @@ def main():
     
     # Build and train the model
     print("Building and training the model...")
-    model = build_model(input_shape=(LAG_WINDOW, len(features)), output_length=LAG_WINDOW)
+    model = build_model(input_shape=(LAG_WINDOW, len(features)))
     
     history = model.fit(
         X_train, y_train,
@@ -114,19 +124,15 @@ def main():
     
     # Make predictions
     y_pred = model.predict(X_test)
-    y_pred_binary = (y_pred > 0.5).astype(int)
+    y_pred_binary = (y_pred > 0.5).astype(int).flatten()
     
-    # Focus on the prediction for the last day in each window
-    y_test_last_day = y_test[:, -1]
-    y_pred_last_day = y_pred_binary[:, -1]
+    # Calculate accuracy
+    accuracy = accuracy_score(y_test, y_pred_binary)
+    print(f"Prediction Accuracy: {accuracy:.4f}")
     
-    # Calculate accuracy for the last day predictions
-    last_day_accuracy = accuracy_score(y_test_last_day, y_pred_last_day)
-    print(f"Last Day Prediction Accuracy: {last_day_accuracy:.4f}")
-    
-    # Print classification report for the last day
-    print("\nClassification Report for Last Day Predictions:")
-    print(classification_report(y_test_last_day, y_pred_last_day))
+    # Print classification report
+    print("\nClassification Report:")
+    print(classification_report(y_test, y_pred_binary))
     
     # Plot training history
     plt.figure(figsize=(12, 5))
@@ -152,11 +158,11 @@ def main():
     plt.close()
     
     # Plot actual vs predicted movements for a sample period
-    sample_size = min(50, len(y_test_last_day))
+    sample_size = min(50, len(y_test))
     plt.figure(figsize=(15, 6))
-    plt.plot(y_test_last_day[:sample_size], label='Actual Movement', marker='o')
-    plt.plot(y_pred_last_day[:sample_size], label='Predicted Movement', marker='x')
-    plt.title('Actual vs Predicted Stock Movements (Last Day of Each Window)')
+    plt.plot(y_test[:sample_size], label='Actual Movement', marker='o')
+    plt.plot(y_pred_binary[:sample_size], label='Predicted Movement', marker='x')
+    plt.title('Actual vs Predicted Stock Movements (Next Day)')
     plt.xlabel('Sample Index')
     plt.ylabel('Movement (1=Up, 0=Down)')
     plt.legend()
