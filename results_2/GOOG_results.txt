@@ -2,13 +2,13 @@ Results for GOOG
 
 With Sentiment Analysis:
 Training Accuracy: 0.5579
-Testing Accuracy: 0.6105
-Final Capital: $992.23
+Testing Accuracy: 0.6000
+Final Capital: $990.64
 
 Without Sentiment Analysis:
-Training Accuracy: 0.6000
-Testing Accuracy: 0.6211
-Final Capital: $987.80
+Training Accuracy: 0.6158
+Testing Accuracy: 0.6000
+Final Capital: $979.79
 
 Buy and Hold Strategy:
 Final Value: $927.48

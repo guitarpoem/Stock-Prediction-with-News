@@ -9,6 +9,8 @@ from tensorflow.keras.callbacks import EarlyStopping
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 import statistics
+from backtesting import Backtest, Strategy
+from backtesting.lib import crossover
 
 def load_data(file_path, sequence_length=5, use_sentiment=True):
     # Load the data
@@ -51,6 +53,74 @@ def build_model(input_shape):
                  metrics=['accuracy'])
     return model
 
+class LSTMTradingStrategy(Strategy):
+    def init(self):
+        self.model = None
+        self.scaler = None
+        self.sequence_length = 5
+        self.use_sentiment = True
+        
+    def next(self):
+        if len(self.data) < self.sequence_length:
+            return
+            
+        # Prepare the sequence for prediction
+        sequence = []
+        for i in range(self.sequence_length):
+            idx = len(self.data) - self.sequence_length + i
+            features = [
+                self.data.Open[idx],
+                self.data.High[idx],
+                self.data.Low[idx],
+                self.data.Close[idx],
+                self.data.Volume[idx]
+            ]
+            if self.use_sentiment:
+                features.insert(0, self.data.Sentiment[idx])
+            sequence.append(features)
+        
+        # Normalize the sequence
+        sequence = self.scaler.transform(sequence)
+        sequence = np.array([sequence])
+        
+        # Get prediction
+        prediction = self.model.predict(sequence, verbose=0)[0][0]
+        
+        # Trading logic
+        if prediction > 0.7 and not self.position:
+            self.buy()
+        elif prediction < 0.3 and self.position:
+            self.position.close()
+
+def run_backtest(model, scaler, test_data, use_sentiment=True):
+    # Prepare the data for backtesting
+    df = test_data.copy()
+    df['Sentiment'] = df['Sentiment'].map({'Positive': 1, 'Neutral': 0, 'Negative': -1})
+    
+    # Convert index to datetime
+    df.index = pd.to_datetime(df.index)
+    
+    # Create strategy class with model and scaler
+    class CustomLSTMTradingStrategy(LSTMTradingStrategy):
+        def init(self):
+            super().init()
+            self.model = model
+            self.scaler = scaler
+            self.use_sentiment = use_sentiment
+    
+    # Create and run backtest
+    bt = Backtest(
+        df,
+        CustomLSTMTradingStrategy,
+        cash=1000,
+        commission=.002,
+        exclusive_orders=True
+    )
+    
+    # Run backtest
+    stats = bt.run()
+    return stats
+
 def run_experiment(use_sentiment):
     print(f"\nRunning experiment with {'sentiment' if use_sentiment else 'no sentiment'}")
     
@@ -61,6 +131,9 @@ def run_experiment(use_sentiment):
     split_idx = int(len(X) * 0.8)
     X_train, X_test = X[:split_idx], X[split_idx:]
     y_train, y_test = y[:split_idx], y[split_idx:]
+    
+    # Load the test data for backtesting
+    test_data = pd.read_csv('combined_AAPL.csv').iloc[split_idx:]
     
     # Build model
     model = build_model((5, X.shape[2]))
@@ -91,14 +164,23 @@ def run_experiment(use_sentiment):
     y_pred = (model.predict(X_test) > 0.5).astype(int)
     cm = confusion_matrix(y_test, y_pred)
     
+    # Run backtest
+    backtest_stats = run_backtest(model, scaler, test_data, use_sentiment)
+    
     print(f"Training Accuracy: {train_score[1]:.4f}")
     print(f"Testing Accuracy: {test_score[1]:.4f}")
     print(f"Confusion Matrix:\n{cm}")
+    print("\nBacktest Results:")
+    print(f"Return: {backtest_stats['Return [%]']:.2f}%")
+    print(f"Buy & Hold Return: {backtest_stats['Buy & Hold Return [%]']:.2f}%")
+    print(f"Max. Drawdown: {backtest_stats['Max. Drawdown [%]']:.2f}%")
+    print(f"# Trades: {backtest_stats['# Trades']}")
     
     return {
         'train_acc': train_score[1],
         'test_acc': test_score[1],
-        'confusion_matrix': cm
+        'confusion_matrix': cm,
+        'backtest_stats': backtest_stats
     }
 
 def main():

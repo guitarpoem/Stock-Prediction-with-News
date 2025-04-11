@@ -1,20 +1,21 @@
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
-from tensorflow.keras.models import Sequential
+from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import LSTM, Dense, Dropout
 from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 import statistics
 import backtrader as bt
 from datetime import datetime
+import os
 
 class SentimentStrategy(bt.Strategy):
     params = (
-        ('buy_threshold', 0.6),
-        ('sell_threshold', 0.4),
+        ('buy_threshold', 0.5),
+        ('sell_threshold', 0.5),
     )
 
     def __init__(self):
@@ -159,26 +160,45 @@ def run_experiment(use_sentiment, stock_name):
     X_train, X_test = X[:split_idx], X[split_idx:]
     y_train, y_test = y[:split_idx], y[split_idx:]
     
-    # Build model
-    model = build_model((5, X.shape[2]))
+    # Create model directory if it doesn't exist
+    model_dir = f'./models/{stock_name}'
+    os.makedirs(model_dir, exist_ok=True)
     
-    # Define early stopping
-    early_stopping = EarlyStopping(
-        monitor='val_loss',
-        patience=50,
-        restore_best_weights=True,
-        verbose=0
-    )
+    # Define model path
+    model_path = f'{model_dir}/model_{"with_sentiment" if use_sentiment else "without_sentiment"}.h5'
     
-    # Train model
-    model.fit(
-        X_train, y_train,
-        epochs=150,
-        batch_size=64,
-        validation_data=(X_test, y_test),
-        verbose=0,
-        callbacks=[early_stopping]
-    )
+    # Check if model exists
+    if os.path.exists(model_path):
+        print(f"Loading existing model for {stock_name} {'with' if use_sentiment else 'without'} sentiment")
+        model = load_model(model_path)
+    else:
+        print(f"Building new model for {stock_name} {'with' if use_sentiment else 'without'} sentiment")
+        model = build_model((5, X.shape[2]))
+        
+        # Define callbacks
+        early_stopping = EarlyStopping(
+            monitor='val_loss',
+            patience=50,
+            restore_best_weights=True,
+            verbose=0
+        )
+        
+        model_checkpoint = ModelCheckpoint(
+            model_path,
+            monitor='val_loss',
+            save_best_only=True,
+            verbose=0
+        )
+        
+        # Train model
+        model.fit(
+            X_train, y_train,
+            epochs=150,
+            batch_size=64,
+            validation_data=(X_test, y_test),
+            verbose=0,
+            callbacks=[early_stopping, model_checkpoint]
+        )
     
     # Evaluate model
     train_score = model.evaluate(X_train, y_train, verbose=0)

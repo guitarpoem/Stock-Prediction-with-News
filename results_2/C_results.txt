@@ -2,13 +2,13 @@ Results for C
 
 With Sentiment Analysis:
 Training Accuracy: 0.5684
-Testing Accuracy: 0.6421
-Final Capital: $991.86
+Testing Accuracy: 0.6105
+Final Capital: $1002.86
 
 Without Sentiment Analysis:
-Training Accuracy: 0.5947
+Training Accuracy: 0.5868
 Testing Accuracy: 0.5895
-Final Capital: $1000.00
+Final Capital: $979.45
 
 Buy and Hold Strategy:
 Final Value: $927.48
