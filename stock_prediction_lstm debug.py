@@ -171,38 +171,46 @@ def main():
     else:
         print(f"Training with sentiment. Features used: {features}")
     
-    # Create a copy of the data for scaling
-    data_scaled = data[features].copy()
+    # First split the data into train and test sets
+    # This should be done BEFORE any scaling
+    split_idx = int(len(data) * (1 - TEST_SIZE))
+    train_data = data.iloc[:split_idx].copy()
+    test_data = data.iloc[split_idx:].copy()
+    
+    # Scale training data
+    train_scaled = train_data[features].copy()
     
     # Special handling for movement_percent to keep it centered around 0
-    movement_mean = data_scaled['movement_percent'].mean()
-    movement_std = data_scaled['movement_percent'].std()
-    data_scaled['movement_percent'] = (data_scaled['movement_percent'] - movement_mean) / movement_std
+    movement_mean = train_scaled['movement_percent'].mean()
+    movement_std = train_scaled['movement_percent'].std()
+    train_scaled['movement_percent'] = (train_scaled['movement_percent'] - movement_mean) / movement_std
     
     # Scale other numerical features using MinMaxScaler
     price_volume_features = [f for f in features if f != 'movement_percent' and f != 'sentiment_numeric']
     scaler = MinMaxScaler()
-    data_scaled[price_volume_features] = scaler.fit_transform(data[price_volume_features])
+    train_scaled[price_volume_features] = scaler.fit_transform(train_data[price_volume_features])
     
-    # Create sequences
+    # Scale test data using parameters from training data
+    test_scaled = test_data[features].copy()
+    test_scaled['movement_percent'] = (test_data['movement_percent'] - movement_mean) / movement_std
+    test_scaled[price_volume_features] = scaler.transform(test_data[price_volume_features])
+    
+    # Create sequences for training and testing separately
     print("Creating sequences...")
     print(f"Using prediction horizon of {PREDICTION_HORIZON} days")
-    X, y = create_sequences(data_scaled, LAG_WINDOW, PREDICTION_HORIZON)
-    print(f"X shape: {X.shape}, y shape: {y.shape}")
+    X_train, y_train = create_sequences(train_scaled, LAG_WINDOW, PREDICTION_HORIZON)
+    X_test, y_test = create_sequences(test_scaled, LAG_WINDOW, PREDICTION_HORIZON)
+    print(f"X_train shape: {X_train.shape}, y_train shape: {y_train.shape}")
+    print(f"X_test shape: {X_test.shape}, y_test shape: {y_test.shape}")
     
     # Display sample data
     print("\nSample X data (first 3 sequences):")
-    for i in range(min(3, len(X))):
+    for i in range(min(3, len(X_train))):
         print(f"Sequence {i+1}:")
-        sample_df = pd.DataFrame(X[i], columns=features)
+        sample_df = pd.DataFrame(X_train[i], columns=features)
         print(sample_df)
-        print(f"Target y[{i}]: {y[i]} ({'Up' if y[i] == 1 else 'Down'} over next {PREDICTION_HORIZON} days)")
+        print(f"Target y_train[{i}]: {y_train[i]} ({'Up' if y_train[i] == 1 else 'Down'} over next {PREDICTION_HORIZON} days)")
         print()
-    
-    # Split into training and testing sets
-    split_idx = int(len(X) * (1 - TEST_SIZE))
-    X_train, X_test = X[:split_idx], X[split_idx:]
-    y_train, y_test = y[:split_idx], y[split_idx:]
     
     # Build and train the model
     print("Building and training the model...")

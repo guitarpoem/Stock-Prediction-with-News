@@ -16,16 +16,16 @@ tf.random.set_seed(42)
 # Parameters
 LAG_WINDOW = 15  # Size of the lag window (Δd)
 PREDICTION_HORIZON = 1  # Number of days to look ahead for prediction
-TEST_SIZE = 0.2  # Proportion of data to use for testing
+TEST_SIZE = 0.1  # Proportion of data to use for testing
 # USE_SENTIMENT = True  # Switch to toggle sentiment feature
 USE_SENTIMENT = False  # Switch to toggle sentiment feature
 
 # Model hyperparameters
 LEARNING_RATE = 0.001  # Learning rate for Adam optimizer
 BATCH_SIZE = 64  # Batch size for training
-EPOCHS = 80  # Maximum number of epochs
+EPOCHS = 100  # Maximum number of epochs
 EARLY_STOPPING_PATIENCE = EPOCHS  # Patience for early stopping
-VALIDATION_SPLIT = 0.2  # Proportion of training data to use for validation
+VALIDATION_SPLIT = 0.1  # Proportion of training data to use for validation
 
 # LSTM model architecture
 LSTM_UNITS_1 = 64  # Number of units in first LSTM layer
@@ -54,61 +54,21 @@ def load_and_prepare_data(file_path):
     
     return df[['date'] + features]
 
-def add_technical_indicators(df):
-    """Add technical indicators to the dataframe."""
-    # Make a copy to avoid warnings
-    df = df.copy()
-    
-    # Simple Moving Averages (SMA)
-    df['sma_5'] = df['close_price'].rolling(window=5).mean()
-    df['sma_20'] = df['close_price'].rolling(window=20).mean()
-    
-    # Exponential Moving Averages (EMA)
-    df['ema_12'] = df['close_price'].ewm(span=12, adjust=False).mean()
-    df['ema_26'] = df['close_price'].ewm(span=26, adjust=False).mean()
-    
-    # MACD (Moving Average Convergence Divergence)
-    df['macd'] = df['ema_12'] - df['ema_26']
-    df['macd_signal'] = df['macd'].ewm(span=9, adjust=False).mean()
-    df['macd_hist'] = df['macd'] - df['macd_signal']
-    
-    # RSI (Relative Strength Index)
-    delta = df['close_price'].diff()
-    gain = delta.where(delta > 0, 0)
-    loss = -delta.where(delta < 0, 0)
-    avg_gain = gain.rolling(window=14).mean()
-    avg_loss = loss.rolling(window=14).mean()
-    rs = avg_gain / avg_loss
-    df['rsi_14'] = 100 - (100 / (1 + rs))
-    
-    # Bollinger Bands
-    df['bb_middle'] = df['close_price'].rolling(window=20).mean()
-    df['bb_std'] = df['close_price'].rolling(window=20).std()
-    df['bb_upper'] = df['bb_middle'] + (df['bb_std'] * 2)
-    df['bb_lower'] = df['bb_middle'] - (df['bb_std'] * 2)
-    df['bb_width'] = (df['bb_upper'] - df['bb_lower']) / df['bb_middle']
-    
-    # Fill NaN values that result from rolling calculations
-    df = df.fillna(method='bfill')
-    
-    return df
-
-def create_sequences(data, lag_window, prediction_horizon):
-    """Create sequences for LSTM model to predict the overall movement for the next N days."""
+def create_sequences(data, lag_window, prediction_horizon=1):
+    """Create sequences for LSTM model to predict the next day's movement."""
     X, y = [], []
     
     for i in range(len(data) - lag_window - prediction_horizon):
         # Input sequence: features from days i to i+lag_window-1
         seq = data[i:i+lag_window].values
         
-        # Target: overall movement direction for the next prediction_horizon days
-        # Calculate if the price after prediction_horizon days is higher than the current price
         current_close = data['close_price'].iloc[i+lag_window-1]
         future_close = data['close_price'].iloc[i+lag_window+prediction_horizon-1]
         
         # 1 if overall movement is positive, 0 if negative or flat
         target = 1 if future_close > current_close else 0
-        
+        target2 = 1 if data['movement_percent'].iloc[i+lag_window] > 0 else 0
+        print(target == target2)
         X.append(seq)
         y.append(target)
     
@@ -130,7 +90,7 @@ def create_sequences(data, lag_window, prediction_horizon):
 #         metrics=['accuracy']
 #     )
     
-#     return model
+    return model
 
 def build_model(input_shape):
     """Build and compile a simpler LSTM model with a single LSTM layer."""
@@ -152,14 +112,7 @@ def main():
     # Load and prepare data
     print("Loading and preparing data...")
     data = load_and_prepare_data('dataset/AAPL.csv')
-    # data = load_and_prepare_data('dataset/AMZN.csv')
-
     print(f"Data shape: {data.shape}")
-    
-    # Add technical indicators
-    print("Adding technical indicators...")
-    # data = add_technical_indicators(data)
-    print(f"Data shape after adding indicators: {data.shape}")
     
     # Normalize numerical features
     features = data.columns[1:]  # Exclude date
@@ -183,11 +136,10 @@ def main():
     price_volume_features = [f for f in features if f != 'movement_percent' and f != 'sentiment_numeric']
     scaler = MinMaxScaler()
     data_scaled[price_volume_features] = scaler.fit_transform(data[price_volume_features])
-    
+
     # Create sequences
     print("Creating sequences...")
-    print(f"Using prediction horizon of {PREDICTION_HORIZON} days")
-    X, y = create_sequences(data_scaled, LAG_WINDOW, PREDICTION_HORIZON)
+    X, y = create_sequences(data_scaled, LAG_WINDOW)
     print(f"X shape: {X.shape}, y shape: {y.shape}")
     
     # Display sample data
@@ -196,7 +148,7 @@ def main():
         print(f"Sequence {i+1}:")
         sample_df = pd.DataFrame(X[i], columns=features)
         print(sample_df)
-        print(f"Target y[{i}]: {y[i]} ({'Up' if y[i] == 1 else 'Down'} over next {PREDICTION_HORIZON} days)")
+        print(f"Target y[{i}]: {y[i]} ({'Up' if y[i] == 1 else 'Down'})")
         print()
     
     # Split into training and testing sets
@@ -271,7 +223,7 @@ def main():
     plt.figure(figsize=(15, 6))
     plt.plot(y_test[:sample_size], label='Actual Movement', marker='o')
     plt.plot(y_pred_binary[:sample_size], label='Predicted Movement', marker='x')
-    plt.title(f'Actual vs Predicted Stock Movements (Next {PREDICTION_HORIZON} Days)')
+    plt.title('Actual vs Predicted Stock Movements (Next Day)')
     plt.xlabel('Sample Index')
     plt.ylabel('Movement (1=Up, 0=Down)')
     plt.legend()
