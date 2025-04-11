@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense, Dropout, Input
+from tensorflow.keras.layers import LSTM, Dense, Dropout
 from tensorflow.keras.optimizers import Adam
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
@@ -36,15 +36,13 @@ def load_data(file_path, sequence_length=5, use_sentiment=True):
     return np.array(X), np.array(y), scaler
 
 def build_model(input_shape):
-    model = Sequential([
-        Input(shape=input_shape),
-        LSTM(50, return_sequences=True),
-        Dropout(0.2),
-        LSTM(50, return_sequences=False),
-        Dropout(0.2),
-        Dense(25, activation='relu'),
-        Dense(1, activation='sigmoid')
-    ])
+    model = Sequential()
+    model.add(LSTM(50, return_sequences=True, input_shape=input_shape))
+    model.add(Dropout(0.2))
+    model.add(LSTM(50, return_sequences=False))
+    model.add(Dropout(0.2))
+    model.add(Dense(25, activation='relu'))
+    model.add(Dense(1, activation='sigmoid'))
     
     model.compile(optimizer=Adam(learning_rate=0.0005),
                  loss='binary_crossentropy',
