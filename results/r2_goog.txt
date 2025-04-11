@@ -1,0 +1,69 @@
+Running experiments WITH sentiment analysis...
+
+Trial 1 with sentiment
+2025-04-11 15:56:17.826263: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags. 
+C:\Users\gg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\keras\src\layers\rnn\rnn.py:200: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(**kwargs)
+Trial 1 - Training Accuracy: 0.5632, Testing Accuracy: 0.6211
+
+Trial 2 with sentiment
+C:\Users\gg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\keras\src\layers\rnn\rnn.py:200: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(**kwargs)
+Trial 2 - Training Accuracy: 0.5632, Testing Accuracy: 0.6316
+
+Trial 3 with sentiment
+C:\Users\gg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\keras\src\layers\rnn\rnn.py:200: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(**kwargs)
+Trial 3 - Training Accuracy: 0.5632, Testing Accuracy: 0.6211
+
+Trial 4 with sentiment
+C:\Users\gg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\keras\src\layers\rnn\rnn.py:200: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(**kwargs)
+Trial 4 - Training Accuracy: 0.5605, Testing Accuracy: 0.6211
+
+Trial 5 with sentiment
+C:\Users\gg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\keras\src\layers\rnn\rnn.py:200: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(**kwargs)
+Trial 5 - Training Accuracy: 0.5711, Testing Accuracy: 0.6316
+
+Running experiments WITHOUT sentiment analysis...
+
+Trial 1 with no sentiment
+C:\Users\gg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\keras\src\layers\rnn\rnn.py:200: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(**kwargs)
+Trial 1 - Training Accuracy: 0.6079, Testing Accuracy: 0.6105
+
+Trial 2 with no sentiment
+C:\Users\gg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\keras\src\layers\rnn\rnn.py:200: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(**kwargs)
+Trial 2 - Training Accuracy: 0.6132, Testing Accuracy: 0.5579
+
+Trial 3 with no sentiment
+C:\Users\gg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\keras\src\layers\rnn\rnn.py:200: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(**kwargs)
+Trial 3 - Training Accuracy: 0.5895, Testing Accuracy: 0.5789
+
+Trial 4 with no sentiment
+C:\Users\gg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\keras\src\layers\rnn\rnn.py:200: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(**kwargs)
+Trial 4 - Training Accuracy: 0.6053, Testing Accuracy: 0.5895
+
+Trial 5 with no sentiment
+C:\Users\gg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\keras\src\layers\rnn\rnn.py:200: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(**kwargs)
+Trial 5 - Training Accuracy: 0.6026, Testing Accuracy: 0.6000
+
+Comparison Statistics:
+
+With Sentiment Analysis:
+Average Training Accuracy: 0.5642
+Average Testing Accuracy: 0.6253
+Training Accuracy Std Dev: 0.0040
+Testing Accuracy Std Dev: 0.0058
+
+Without Sentiment Analysis:
+Average Training Accuracy: 0.6037
+Average Testing Accuracy: 0.5874
+Training Accuracy Std Dev: 0.0088
+Testing Accuracy Std Dev: 0.0202
