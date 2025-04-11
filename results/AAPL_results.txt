@@ -1,0 +1,13 @@
+Results for AAPL
+
+With Sentiment Analysis:
+Average Training Accuracy: 0.5600
+Average Testing Accuracy: 0.6137
+Training Accuracy Std Dev: 0.0061
+Testing Accuracy Std Dev: 0.0149
+
+Without Sentiment Analysis:
+Average Training Accuracy: 0.6032
+Average Testing Accuracy: 0.5884
+Training Accuracy Std Dev: 0.0107
+Testing Accuracy Std Dev: 0.0126

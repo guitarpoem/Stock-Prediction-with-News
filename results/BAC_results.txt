@@ -1,0 +1,13 @@
+Results for BAC
+
+With Sentiment Analysis:
+Average Training Accuracy: 0.5637
+Average Testing Accuracy: 0.6211
+Training Accuracy Std Dev: 0.0049
+Testing Accuracy Std Dev: 0.0099
+
+Without Sentiment Analysis:
+Average Training Accuracy: 0.6079
+Average Testing Accuracy: 0.5842
+Training Accuracy Std Dev: 0.0076
+Testing Accuracy Std Dev: 0.0151

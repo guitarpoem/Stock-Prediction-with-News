@@ -1,0 +1,13 @@
+Results for GOOG
+
+With Sentiment Analysis:
+Average Training Accuracy: 0.5650
+Average Testing Accuracy: 0.6200
+Training Accuracy Std Dev: 0.0061
+Testing Accuracy Std Dev: 0.0092
+
+Without Sentiment Analysis:
+Average Training Accuracy: 0.6082
+Average Testing Accuracy: 0.5895
+Training Accuracy Std Dev: 0.0116
+Testing Accuracy Std Dev: 0.0165

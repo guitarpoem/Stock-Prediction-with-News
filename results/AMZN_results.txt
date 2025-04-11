@@ -1,0 +1,13 @@
+Results for AMZN
+
+With Sentiment Analysis:
+Average Training Accuracy: 0.5616
+Average Testing Accuracy: 0.6263
+Training Accuracy Std Dev: 0.0060
+Testing Accuracy Std Dev: 0.0166
+
+Without Sentiment Analysis:
+Average Training Accuracy: 0.6034
+Average Testing Accuracy: 0.5905
+Training Accuracy Std Dev: 0.0154
+Testing Accuracy Std Dev: 0.0219

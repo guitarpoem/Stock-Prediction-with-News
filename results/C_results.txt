@@ -1,0 +1,13 @@
+Results for C
+
+With Sentiment Analysis:
+Average Training Accuracy: 0.5645
+Average Testing Accuracy: 0.6221
+Training Accuracy Std Dev: 0.0047
+Testing Accuracy Std Dev: 0.0105
+
+Without Sentiment Analysis:
+Average Training Accuracy: 0.6039
+Average Testing Accuracy: 0.5863
+Training Accuracy Std Dev: 0.0109
+Testing Accuracy Std Dev: 0.0243

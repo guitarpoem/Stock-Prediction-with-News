@@ -1,0 +1,13 @@
+Results for D
+
+With Sentiment Analysis:
+Average Training Accuracy: 0.5655
+Average Testing Accuracy: 0.6168
+Training Accuracy Std Dev: 0.0034
+Testing Accuracy Std Dev: 0.0124
+
+Without Sentiment Analysis:
+Average Training Accuracy: 0.6087
+Average Testing Accuracy: 0.5958
+Training Accuracy Std Dev: 0.0144
+Testing Accuracy Std Dev: 0.0200
