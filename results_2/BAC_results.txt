@@ -1,0 +1,14 @@
+Results for BAC
+
+With Sentiment Analysis:
+Training Accuracy: 0.5658
+Testing Accuracy: 0.6105
+Final Capital: $1000.00
+
+Without Sentiment Analysis:
+Training Accuracy: 0.6132
+Testing Accuracy: 0.6000
+Final Capital: $987.80
+
+Buy and Hold Strategy:
+Final Value: $927.48

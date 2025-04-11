@@ -1,0 +1,14 @@
+Results for AMZN
+
+With Sentiment Analysis:
+Training Accuracy: 0.5632
+Testing Accuracy: 0.6211
+Final Capital: $992.23
+
+Without Sentiment Analysis:
+Training Accuracy: 0.6132
+Testing Accuracy: 0.5789
+Final Capital: $997.83
+
+Buy and Hold Strategy:
+Final Value: $927.48
