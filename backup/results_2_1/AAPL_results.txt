@@ -1,0 +1,14 @@
+Results for AAPL
+
+With Sentiment Analysis:
+Training Accuracy: 0.5658
+Testing Accuracy: 0.6316
+Final Capital: $993.67
+
+Without Sentiment Analysis:
+Training Accuracy: 0.5947
+Testing Accuracy: 0.5789
+Final Capital: $985.17
+
+Buy and Hold Strategy:
+Final Value: $927.48

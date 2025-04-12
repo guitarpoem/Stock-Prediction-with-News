@@ -1,0 +1,14 @@
+Results for D
+
+With Sentiment Analysis:
+Training Accuracy: 0.5711
+Testing Accuracy: 0.6421
+Final Capital: $1000.72
+
+Without Sentiment Analysis:
+Training Accuracy: 0.6105
+Testing Accuracy: 0.6211
+Final Capital: $977.03
+
+Buy and Hold Strategy:
+Final Value: $927.48

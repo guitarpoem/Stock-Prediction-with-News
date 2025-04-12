@@ -1,0 +1,9 @@
+Results for D
+
+With Sentiment Analysis:
+Training Accuracy: 0.5442
+Testing Accuracy: 0.5114
+
+Without Sentiment Analysis:
+Training Accuracy: 0.6581
+Testing Accuracy: 0.6136

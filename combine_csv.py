@@ -3,8 +3,8 @@ import pandas as pd
 def combine_csv_files(stock_name='AAPL'):
     try:
         # Read the CSV files
-        df1 = pd.read_csv('sentiment/AAPL.csv')
-        df2 = pd.read_csv('price/AAPL.csv')
+        df1 = pd.read_csv(f'sentiment/{stock_name}.csv')
+        df2 = pd.read_csv(f'price/{stock_name}.csv')
         
         # Convert Date columns to datetime if they're not already
         df1['Date'] = pd.to_datetime(df1['Date'])
@@ -29,9 +29,9 @@ def combine_csv_files(stock_name='AAPL'):
         print(f"An error occurred: {str(e)}")
 
 if __name__ == "__main__":
-    # combine_csv_files('AAPL') 
-    # combine_csv_files('AMZN') 
-    # combine_csv_files('GOOG') 
-    # combine_csv_files('BAC')
-    # combine_csv_files('C')
-    # combine_csv_files('D')
+    combine_csv_files('AAPL') 
+    combine_csv_files('AMZN') 
+    combine_csv_files('GOOG') 
+    combine_csv_files('BAC')
+    combine_csv_files('C')
+    combine_csv_files('D')

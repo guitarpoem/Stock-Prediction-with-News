@@ -1,0 +1,9 @@
+Results for BAC
+
+With Sentiment Analysis:
+Training Accuracy: 0.5289
+Testing Accuracy: 0.5402
+
+Without Sentiment Analysis:
+Training Accuracy: 0.6792
+Testing Accuracy: 0.7126

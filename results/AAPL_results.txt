@@ -1,0 +1,9 @@
+Results for AAPL
+
+With Sentiment Analysis:
+Training Accuracy: 0.5658
+Testing Accuracy: 0.6421
+
+Without Sentiment Analysis:
+Training Accuracy: 0.6105
+Testing Accuracy: 0.5895

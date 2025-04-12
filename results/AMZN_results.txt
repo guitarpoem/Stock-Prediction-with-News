@@ -1,0 +1,9 @@
+Results for AMZN
+
+With Sentiment Analysis:
+Training Accuracy: 0.5121
+Testing Accuracy: 0.5213
+
+Without Sentiment Analysis:
+Training Accuracy: 0.5550
+Testing Accuracy: 0.5213

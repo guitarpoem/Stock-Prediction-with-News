@@ -1,0 +1,9 @@
+Results for C
+
+With Sentiment Analysis:
+Training Accuracy: 0.5597
+Testing Accuracy: 0.5795
+
+Without Sentiment Analysis:
+Training Accuracy: 0.6591
+Testing Accuracy: 0.7273

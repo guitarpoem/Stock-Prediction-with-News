@@ -1,0 +1,9 @@
+Results for GOOG
+
+With Sentiment Analysis:
+Training Accuracy: 0.5067
+Testing Accuracy: 0.5000
+
+Without Sentiment Analysis:
+Training Accuracy: 0.4827
+Testing Accuracy: 0.5319
