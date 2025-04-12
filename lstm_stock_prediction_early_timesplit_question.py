@@ -15,10 +15,11 @@ def load_data(file_path, sequence_length=5, use_sentiment=True):
     
     # Convert sentiment to numerical values
     sentiment_map = {'Positive': 1, 'Neutral': 0, 'Negative': -1}
+    
     df['Sentiment'] = df['Sentiment'].map(sentiment_map)
     
     # Select features
-    features = ['Open', 'High', 'Low', 'Close', 'Volume']
+    features = ['Close']
     if use_sentiment:
         features.insert(0, 'Sentiment')
     data = df[features].values
@@ -32,11 +33,11 @@ def load_data(file_path, sequence_length=5, use_sentiment=True):
     for i in range(len(data) - sequence_length):
         X.append(data[i:(i + sequence_length)])
         # Create binary target: 1 if next day's close is higher than current day's close
-        y.append(1 if data[i + sequence_length][4] > data[i + sequence_length - 1][4] else 0)
+        y.append(1 if data[i + sequence_length][0] > data[i + sequence_length - 1][0] else 0)
     
     return np.array(X), np.array(y), scaler
 
-def build_model(input_shape, learning_rate):
+def build_model(input_shape):
     model = Sequential([
         Input(shape=input_shape),
         LSTM(50, return_sequences=True),
@@ -47,7 +48,7 @@ def build_model(input_shape, learning_rate):
         Dense(1, activation='sigmoid')
     ])
     
-    model.compile(optimizer=Adam(learning_rate),
+    model.compile(optimizer=Adam(learning_rate=0.0005),
                  loss='binary_crossentropy',
                  metrics=['accuracy'])
     return model
@@ -58,14 +59,14 @@ def main():
     test_size = 0.2
     random_state = 42
     epochs = 150
-    batch_size = 64
-    learning_rate = 0.00005
+    batch_size = 32
+    learning_rate = 0.0001
     use_sentiment = True
     # use_sentiment = False
     verbose = 1  # Set to 1 to show training progress, 0 to hide it
     early_stopping_patience = 30  # Number of epochs to wait before early stopping
     
-    stock_name = 'AMZN'
+    stock_name = 'AAPL'
 
     # Load and prepare data
     X, y, scaler = load_data(f'combined_{stock_name}.csv', sequence_length, use_sentiment)
@@ -76,7 +77,7 @@ def main():
     y_train, y_test = y[:split_idx], y[split_idx:]
     
     # Build model
-    model = build_model((sequence_length, X.shape[2]), learning_rate)
+    model = build_model((sequence_length, X.shape[2]))
     
     # Configure early stopping
     early_stopping = EarlyStopping(

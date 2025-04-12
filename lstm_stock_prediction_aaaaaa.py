@@ -5,7 +5,6 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Dropout, Input
 from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.callbacks import EarlyStopping
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 
@@ -20,7 +19,7 @@ def load_data(file_path, sequence_length=5, use_sentiment=True):
     # Select features
     features = ['Open', 'High', 'Low', 'Close', 'Volume']
     if use_sentiment:
-        features.insert(0, 'Sentiment')
+        features.append('Sentiment')
     data = df[features].values
     
     # Normalize the data
@@ -29,14 +28,15 @@ def load_data(file_path, sequence_length=5, use_sentiment=True):
     
     # Create sequences
     X, y = [], []
+    close_idx = features.index('Close')
     for i in range(len(data) - sequence_length):
         X.append(data[i:(i + sequence_length)])
         # Create binary target: 1 if next day's close is higher than current day's close
-        y.append(1 if data[i + sequence_length][4] > data[i + sequence_length - 1][4] else 0)
+        y.append(1 if data[i + sequence_length][close_idx] > data[i + sequence_length - 1][close_idx] else 0)
     
     return np.array(X), np.array(y), scaler
 
-def build_model(input_shape, learning_rate):
+def build_model(input_shape):
     model = Sequential([
         Input(shape=input_shape),
         LSTM(50, return_sequences=True),
@@ -47,57 +47,57 @@ def build_model(input_shape, learning_rate):
         Dense(1, activation='sigmoid')
     ])
     
-    model.compile(optimizer=Adam(learning_rate),
+    model.compile(optimizer=Adam(learning_rate=0.0005),
                  loss='binary_crossentropy',
                  metrics=['accuracy'])
     return model
 
 def main():
     # Parameters
-    sequence_length = 5
-    test_size = 0.2
-    random_state = 42
+    sequence_length = 10
+    train_ratio = 0.7
+    val_ratio = 0.15
+    test_ratio = 0.15
     epochs = 150
     batch_size = 64
-    learning_rate = 0.00005
-    use_sentiment = True
-    # use_sentiment = False
+    learning_rate = 0.0005
+    # use_sentiment = True
+    use_sentiment = False
     verbose = 1  # Set to 1 to show training progress, 0 to hide it
-    early_stopping_patience = 30  # Number of epochs to wait before early stopping
     
-    stock_name = 'AMZN'
-
     # Load and prepare data
+    # Choose stock name
+    stock_name = 'AMZN'  
     X, y, scaler = load_data(f'combined_{stock_name}.csv', sequence_length, use_sentiment)
     
-    # Split data chronologically (last 20% for testing)
-    split_idx = int(len(X) * (1 - test_size))
-    X_train, X_test = X[:split_idx], X[split_idx:]
-    y_train, y_test = y[:split_idx], y[split_idx:]
+    # Split data in chronological order
+    train_size = int(len(X) * train_ratio)
+    val_size = int(len(X) * val_ratio)
+    
+    X_train = X[:train_size]
+    y_train = y[:train_size]
+    
+    X_val = X[train_size:train_size + val_size]
+    y_val = y[train_size:train_size + val_size]
+    
+    X_test = X[train_size + val_size:]
+    y_test = y[train_size + val_size:]
     
     # Build model
-    model = build_model((sequence_length, X.shape[2]), learning_rate)
-    
-    # Configure early stopping
-    early_stopping = EarlyStopping(
-        monitor='val_loss',
-        patience=early_stopping_patience,
-        restore_best_weights=True,
-        verbose=0
-    )
+    model = build_model((sequence_length, X.shape[2]))
     
     # Train model
     history = model.fit(
         X_train, y_train,
         epochs=epochs,
         batch_size=batch_size,
-        validation_data=(X_test, y_test),
-        verbose=verbose,
-        callbacks=[early_stopping]
+        validation_data=(X_val, y_val),
+        verbose=verbose
     )
     
     # Evaluate model
     train_score = model.evaluate(X_train, y_train, verbose=0)
+    val_score = model.evaluate(X_val, y_val, verbose=0)
     test_score = model.evaluate(X_test, y_test, verbose=0)
     
     # Predict test set
@@ -109,6 +109,7 @@ def main():
     print(cm)
     
     print(f"Training Accuracy: {train_score[1]:.4f}")
+    print(f"Validation Accuracy: {val_score[1]:.4f}")
     print(f"Testing Accuracy: {test_score[1]:.4f}")
     
     # Plot training history
@@ -131,7 +132,7 @@ def main():
     plt.legend()
     
     plt.tight_layout()
-    plt.savefig(f'training_history_{stock_name}.png')
+    plt.savefig('training_history.png')
     plt.close()
 
 if __name__ == "__main__":

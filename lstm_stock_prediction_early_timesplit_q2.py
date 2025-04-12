@@ -36,7 +36,7 @@ def load_data(file_path, sequence_length=5, use_sentiment=True):
     
     return np.array(X), np.array(y), scaler
 
-def build_model(input_shape, learning_rate):
+def build_model(input_shape):
     model = Sequential([
         Input(shape=input_shape),
         LSTM(50, return_sequences=True),
@@ -47,7 +47,7 @@ def build_model(input_shape, learning_rate):
         Dense(1, activation='sigmoid')
     ])
     
-    model.compile(optimizer=Adam(learning_rate),
+    model.compile(optimizer=Adam(learning_rate=0.0005),
                  loss='binary_crossentropy',
                  metrics=['accuracy'])
     return model
@@ -59,7 +59,7 @@ def main():
     random_state = 42
     epochs = 150
     batch_size = 64
-    learning_rate = 0.00005
+    learning_rate = 0.0001
     use_sentiment = True
     # use_sentiment = False
     verbose = 1  # Set to 1 to show training progress, 0 to hide it
@@ -76,7 +76,7 @@ def main():
     y_train, y_test = y[:split_idx], y[split_idx:]
     
     # Build model
-    model = build_model((sequence_length, X.shape[2]), learning_rate)
+    model = build_model((sequence_length, X.shape[2]))
     
     # Configure early stopping
     early_stopping = EarlyStopping(
